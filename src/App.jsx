@@ -525,63 +525,27 @@ function AboutPage({ onNavigate }) {
 }
 
 function SubmitPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({
-    name: "", type: "", description: "", province: "", city: "",
-    industries: "", frequency: "", url: "", cost: "", format: "", contact: "",
-  });
-  const update = (key, val) => setForm(prev => ({ ...prev, [key]: val }));
-  const fieldStyle = {
-    width: "100%", padding: "10px 14px", border: "2px solid #e2e8f0", borderRadius: 10,
-    fontSize: 14, color: "#1e293b", outline: "none", transition: "border-color 0.15s",
-    boxSizing: "border-box", fontFamily: "inherit",
-  };
-  if (submitted) {
-    return (
-      <div style={{ maxWidth: 600, margin: "0 auto", padding: "80px 24px", textAlign: "center" }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
-        <h2 style={{ fontSize: 26, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>Thanks for your submission!</h2>
-        <p style={{ fontSize: 16, color: "#64748b", marginBottom: 32 }}>We'll review your initiative and add it to the directory within a week.</p>
-      </div>
-    );
-  }
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: "48px 24px 80px" }}>
+    <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px 80px" }}>
       <h1 style={{ fontSize: 28, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>Submit an initiative</h1>
-      <p style={{ fontSize: 15, color: "#64748b", marginBottom: 32 }}>Help us grow the directory. Fill in the details below and we'll review your submission.</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        {[
-          { key: "name", label: "Initiative name", placeholder: "e.g. Amsterdam Founder Breakfast" },
-          { key: "type", label: "Type", placeholder: "e.g. Accelerator, Incubator, Community" },
-          { key: "description", label: "Description", placeholder: "What is this initiative about?", textarea: true },
-          { key: "province", label: "Province", placeholder: "e.g. Noord-Holland" },
-          { key: "city", label: "City", placeholder: "e.g. Amsterdam" },
-          { key: "industries", label: "Industries (comma-separated)", placeholder: "e.g. Tech, AI, Fintech" },
-          { key: "frequency", label: "Frequency", placeholder: "e.g. Weekly, Monthly, Annual" },
-          { key: "url", label: "Website URL", placeholder: "https://..." },
-          { key: "cost", label: "Cost", placeholder: "e.g. Free, €50/month, Equity-based" },
-          { key: "format", label: "Format", placeholder: "In-person, Online, or Hybrid" },
-          { key: "contact", label: "Your email", placeholder: "so we can reach you if needed" },
-        ].map(f => (
-          <div key={f.key}>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#334155", marginBottom: 6 }}>{f.label}</label>
-            {f.textarea ? (
-              <textarea value={form[f.key]} onChange={e => update(f.key, e.target.value)}
-                placeholder={f.placeholder} rows={3} style={{ ...fieldStyle, resize: "vertical" }}
-                onFocus={e => e.target.style.borderColor = "#4f6df5"} onBlur={e => e.target.style.borderColor = "#e2e8f0"} />
-            ) : (
-              <input value={form[f.key]} onChange={e => update(f.key, e.target.value)}
-                placeholder={f.placeholder} style={fieldStyle}
-                onFocus={e => e.target.style.borderColor = "#4f6df5"} onBlur={e => e.target.style.borderColor = "#e2e8f0"} />
-            )}
-          </div>
-        ))}
-        <button onClick={() => setSubmitted(true)} style={{
-          padding: "14px 28px", background: "#4f6df5", color: "white", border: "none",
-          borderRadius: 12, fontSize: 15, fontWeight: 600, cursor: "pointer", marginTop: 8,
-        }}>
-          Submit for review
-        </button>
+      <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.7, marginBottom: 32 }}>
+        Know of a founder initiative that should be in our directory? Fill out the form below and we'll review your submission within a week. Approved initiatives are added to the site on a rolling basis.
+      </p>
+      <div style={{
+        background: "white", borderRadius: 16, border: "1px solid #e8ecf2",
+        overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+      }}>
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLSeCNUaWeaEqnVlxe5r4EH8fn_i4kNenTvKDpOX2CUGY-Oux7w/viewform?embedded=true"
+          width="100%"
+          height="1200"
+          frameBorder="0"
+          marginHeight="0"
+          marginWidth="0"
+          style={{ display: "block" }}
+        >
+          Loading form...
+        </iframe>
       </div>
     </div>
   );
