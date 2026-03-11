@@ -196,6 +196,83 @@ const TYPE_CONFIG = {
   "Event":               { icon: Mic,       color: "#ef4444", bg: "#fee2e2" },
 };
 
+// ─── INDUSTRY TAGS (curated per initiative id) ───────────────────────────────
+const INDUSTRY_TAGS = {
+  1:   ["Circular Economy"],
+  2:   ["HealthTech"],
+  3:   ["Maritime"],
+  4:   ["Mobility"],
+  7:   ["Circular Economy"],
+  8:   ["Social Impact"],
+  9:   ["AgriTech"],
+  11:  ["BioTech"],
+  12:  ["BioTech", "HealthTech"],
+  13:  ["Life Sciences"],
+  14:  ["Space & Aerospace"],
+  16:  ["Drones & UAV"],
+  17:  ["Sustainability"],
+  19:  ["Space & Aerospace"],
+  21:  ["BioTech"],
+  24:  ["Maritime"],
+  27:  ["Sustainability"],
+  29:  ["Quantum"],
+  30:  ["Immersive Tech"],
+  32:  ["Social Impact", "Sustainability"],
+  36:  ["BioTech", "HealthTech"],
+  37:  ["AgriTech"],
+  38:  ["Maritime", "CleanTech"],
+  40:  ["Maritime"],
+  41:  ["Robotics"],
+  42:  ["Life Sciences"],
+  43:  ["Space & Aerospace"],
+  49:  ["AgriTech"],
+  50:  ["Cybersecurity"],
+  52:  ["Maritime"],
+  53:  ["HealthTech", "MedTech"],
+  54:  ["AgriTech"],
+  55:  ["Sustainability"],
+  56:  ["Food & Nutrition"],
+  57:  ["Quantum"],
+  59:  ["Immersive Tech"],
+  62:  ["Energy"],
+  63:  ["Social Impact"],
+  64:  ["Social Impact"],
+  67:  ["AgriTech"],
+  69:  ["AI"],
+  70:  ["Cybersecurity"],
+  73:  ["CleanTech"],
+  74:  ["HealthTech"],
+  75:  ["AgriTech"],
+  76:  ["Space & Aerospace"],
+  77:  ["Maritime"],
+  78:  ["Maritime"],
+  79:  ["MedTech"],
+  80:  ["Energy"],
+  85:  ["Drones & UAV"],
+  89:  ["Cybersecurity"],
+  90:  ["Space & Aerospace"],
+  92:  ["Quantum"],
+  93:  ["BioTech"],
+  94:  ["Energy"],
+  97:  ["BioTech"],
+  98:  ["Food & Nutrition"],
+  99:  ["Circular Economy"],
+  100: ["Circular Economy"],
+  101: ["Circular Economy"],
+  102: ["Circular Economy"],
+  106: ["Space & Aerospace"],
+  112: ["Circular Economy"],
+  114: ["Energy"],
+  115: ["HealthTech"],
+  117: ["Energy"],
+  124: ["HealthTech"],
+  141: ["AgriTech"],
+  147: ["Space & Aerospace"],
+  148: ["Space & Aerospace"],
+  152: ["Robotics"],
+  161: ["Energy"],
+};
+
 // ─── COMPONENTS ──────────────────────────────────────────────────────────────
 
 function FilterDropdown({ icon: Icon, options, value, onChange, placeholder }) {
@@ -261,6 +338,7 @@ function InitiativeCard({ initiative }) {
   const TypeIcon = config.icon;
   const accessColor = initiative.access === "Open to all" ? "#10b981" : "#f59e0b";
   const accessBg = initiative.access === "Open to all" ? "#d1fae5" : "#fef3c7";
+  const industryTags = INDUSTRY_TAGS[initiative.id] || initiative.industries || [];
 
   const inner = (
     <div style={{
@@ -307,6 +385,16 @@ function InitiativeCard({ initiative }) {
           <p style={{ fontSize: 12.5, color: "#94a3b8", margin: "0 0 8px", fontWeight: 500 }}>
             {initiative.organization}
           </p>
+        )}
+        {industryTags.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
+            {industryTags.map(tag => (
+              <span key={tag} style={{
+                fontSize: 11, fontWeight: 500, padding: "2px 8px",
+                background: "#f1f5f9", color: "#475569", borderRadius: 6,
+              }}>{tag}</span>
+            ))}
+          </div>
         )}
         {initiative.notes ? (
           <p style={{ fontSize: 13.5, color: "#475569", lineHeight: 1.6, margin: 0, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
