@@ -1,8 +1,12 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, createContext, useContext } from "react";
 import { Search, MapPin, Building2, ExternalLink, Filter, X, ChevronDown, Users, Mic, Rocket, Globe, ArrowRight, Tag, Briefcase, Lightbulb, Lock, DollarSign } from "lucide-react";
+import { supabase } from "./lib/supabase.js";
+import ClaimModal from "./components/ClaimModal.jsx";
 
-// ─── DATA ───────────────────────────────────────────────────────────────────
-const INITIATIVES = [
+export const InitiativesContext = createContext([]);
+
+// ─── FALLBACK DATA (used before Supabase loads) ──────────────────────────────
+const FALLBACK_INITIATIVES = [
   { id: 1, name: "Circular Factory", type: "Accelerator", secondaryType: "", url: "https://www.circular-factory.com", organization: "Circular Factory", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 2, name: "EIT Health", type: "Accelerator", secondaryType: "", url: "https://eithealth.eu", organization: "EIT Health", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 3, name: "PortXL", type: "Accelerator", secondaryType: "", url: "https://www.portxl.org", organization: "PortXL", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
@@ -166,19 +170,19 @@ const INITIATIVES = [
   { id: 161, name: "Photovoltaic Systems Summer School", type: "Event", secondaryType: "", url: "https://www.tudelft.nl/en/ewi/", organization: "TU Delft", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
 ];
 
-const PROVINCES = [...new Set(INITIATIVES.map(i => i.province).filter(Boolean))].sort((a, b) => {
+const PROVINCES = [...new Set(FALLBACK_INITIATIVES.map(i => i.province).filter(Boolean))].sort((a, b) => {
   if (a === "Nationwide") return 1;
   if (b === "Nationwide") return -1;
   return a.localeCompare(b);
 });
-const CITIES = [...new Set(INITIATIVES.map(i => i.city).filter(Boolean))].sort((a, b) => {
+const CITIES = [...new Set(FALLBACK_INITIATIVES.map(i => i.city).filter(Boolean))].sort((a, b) => {
   if (a === "Nationwide") return 1;
   if (b === "Nationwide") return -1;
   return a.localeCompare(b);
 });
-const ALL_INDUSTRIES = [...new Set(INITIATIVES.flatMap(i => i.industries).filter(Boolean))].sort();
-const TYPES = [...new Set(INITIATIVES.map(i => i.type))].sort();
-const FORMATS = [...new Set(INITIATIVES.map(i => i.format).filter(Boolean))].sort();
+const ALL_INDUSTRIES = [...new Set(FALLBACK_INITIATIVES.flatMap(i => i.industries).filter(Boolean))].sort();
+const TYPES = [...new Set(FALLBACK_INITIATIVES.map(i => i.type))].sort();
+const FORMATS = [...new Set(FALLBACK_INITIATIVES.map(i => i.format).filter(Boolean))].sort();
 const ACCESS_OPTIONS = ["Open to all", "Application required"];
 const COST_OPTIONS = ["Free", "Paid"];
 
@@ -252,6 +256,7 @@ function FilterDropdown({ icon: Icon, options, value, onChange, placeholder }) {
 }
 
 function InitiativeCard({ initiative }) {
+  const [claimOpen, setClaimOpen] = useState(false);
   const config = TYPE_CONFIG[initiative.type] || { icon: Globe, color: "#64748b", bg: "#f1f5f9" };
   const TypeIcon = config.icon;
   const accessColor = initiative.access === "Open to all" ? "#10b981" : "#f59e0b";
@@ -319,15 +324,36 @@ function InitiativeCard({ initiative }) {
           </span>
           {initiative.url && <ExternalLink size={14} style={{ color: "#94a3b8" }} />}
         </div>
+        <button
+          onClick={e => { e.preventDefault(); e.stopPropagation(); setClaimOpen(true); }}
+          style={{
+            marginTop: 10, width: "100%", padding: "7px 0",
+            background: "none", border: "1px solid #e2e8f0", borderRadius: 8,
+            fontSize: 12, color: "#94a3b8", cursor: "pointer", fontWeight: 500,
+            transition: "all 0.15s",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#4f6df5"; e.currentTarget.style.color = "#4f6df5"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#94a3b8"; }}
+        >
+          Claim this listing
+        </button>
       </div>
     </div>
   );
 
-  if (!initiative.url) return <div style={{ height: "100%" }}>{inner}</div>;
+  if (!initiative.url) return (
+    <>
+      <div style={{ height: "100%" }}>{inner}</div>
+      {claimOpen && <ClaimModal initiative={initiative} onClose={() => setClaimOpen(false)} />}
+    </>
+  );
   return (
-    <a href={initiative.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
-      {inner}
-    </a>
+    <>
+      <a href={initiative.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
+        {inner}
+      </a>
+      {claimOpen && <ClaimModal initiative={initiative} onClose={() => setClaimOpen(false)} />}
+    </>
   );
 }
 
@@ -354,6 +380,7 @@ function StatCard({ label, value, icon: Icon }) {
 // ─── PAGES ───────────────────────────────────────────────────────────────────
 
 function HomePage({ onNavigate }) {
+  const initiatives = useContext(InitiativesContext);
   return (
     <div>
       <div style={{
@@ -379,7 +406,7 @@ function HomePage({ onNavigate }) {
           <p style={{
             fontSize: 18, color: "#94a3b8", margin: "0 0 32px", lineHeight: 1.6, maxWidth: 520, marginLeft: "auto", marginRight: "auto",
           }}>
-            Discover {INITIATIVES.length} accelerators, incubators, campuses, communities, programs, and events across the Netherlands.
+            Discover {initiatives.length} accelerators, incubators, campuses, communities, programs, and events across the Netherlands.
           </p>
           <button
             onClick={() => onNavigate("directory")}
@@ -399,10 +426,10 @@ function HomePage({ onNavigate }) {
 
       <div style={{ maxWidth: 960, margin: "-30px auto 0", padding: "0 24px", position: "relative", zIndex: 10 }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-          <StatCard label="Initiatives" value={INITIATIVES.length} icon={Rocket} />
-          <StatCard label="Open to all" value={INITIATIVES.filter(i => i.access === "Open to all").length} icon={Users} />
-          <StatCard label="Free" value={INITIATIVES.filter(i => i.cost === "Free").length} icon={Tag} />
-          <StatCard label="Types" value={Object.keys(TYPE_CONFIG).length} icon={Building2} />
+          <StatCard label="Initiatives" value={initiatives.length} icon={Rocket} />
+          <StatCard label="Locations" value={initiatives.filter(i => i.type === "Campus / Coworking").length} icon={Building2} />
+          <StatCard label="Events" value={initiatives.filter(i => i.type === "Event").length} icon={Mic} />
+          <StatCard label="Communities" value={initiatives.filter(i => i.type === "Community / Network").length} icon={Users} />
         </div>
       </div>
 
@@ -412,7 +439,7 @@ function HomePage({ onNavigate }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12 }}>
           {Object.entries(TYPE_CONFIG).map(([type, cfg]) => {
             const Icon = cfg.icon;
-            const count = INITIATIVES.filter(i => i.type === type).length;
+            const count = initiatives.filter(i => i.type === type).length;
             if (count === 0) return null;
             return (
               <button
@@ -446,7 +473,7 @@ function HomePage({ onNavigate }) {
           <p style={{ fontSize: 15, color: "#64748b", marginBottom: 24 }}>See what's happening near you.</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {PROVINCES.map(p => {
-              const count = INITIATIVES.filter(i => i.province === p).length;
+              const count = initiatives.filter(i => i.province === p).length;
               return (
                 <button
                   key={p}
@@ -476,6 +503,7 @@ function HomePage({ onNavigate }) {
 }
 
 function DirectoryPage({ initialFilters }) {
+  const initiatives = useContext(InitiativesContext);
   const [search, setSearch] = useState("");
   const [province, setProvince] = useState(initialFilters?.province || "");
   const [city, setCity] = useState(initialFilters?.city || "");
@@ -487,18 +515,18 @@ function DirectoryPage({ initialFilters }) {
 
   const filteredCities = useMemo(() => {
     if (!province) return CITIES;
-    return [...new Set(INITIATIVES.filter(i => i.province === province).map(i => i.city))].sort();
-  }, [province]);
+    return [...new Set(initiatives.filter(i => i.province === province).map(i => i.city))].sort();
+  }, [province, initiatives]);
 
   useEffect(() => {
     if (province && city) {
-      const validCities = INITIATIVES.filter(i => i.province === province).map(i => i.city);
+      const validCities = initiatives.filter(i => i.province === province).map(i => i.city);
       if (!validCities.includes(city)) setCity("");
     }
-  }, [province]);
+  }, [province, initiatives]);
 
   const filtered = useMemo(() => {
-    return INITIATIVES.filter(i => {
+    return initiatives.filter(i => {
       if (search) {
         const s = search.toLowerCase();
         if (
@@ -643,6 +671,18 @@ function SubmitPage() {
 export default function App() {
   const [page, setPage] = useState("home");
   const [directoryFilters, setDirectoryFilters] = useState({});
+  const [initiatives, setInitiatives] = useState(FALLBACK_INITIATIVES);
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase
+      .from("initiatives")
+      .select("*")
+      .order("id")
+      .then(({ data, error }) => {
+        if (!error && data && data.length > 0) setInitiatives(data);
+      });
+  }, []);
 
   const navigate = (p, filters) => {
     setPage(p);
@@ -661,6 +701,7 @@ export default function App() {
   });
 
   return (
+    <InitiativesContext.Provider value={initiatives}>
     <div style={{ minHeight: "100vh", background: "#f8fafc", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
       <nav style={{
         background: "white", borderBottom: "1px solid #e8ecf2", padding: "0 24px",
@@ -696,9 +737,10 @@ export default function App() {
           FounderHub NL — Connecting Dutch founders
         </p>
         <p style={{ fontSize: 12, color: "#64748b", margin: 0 }}>
-          {INITIATIVES.length} initiatives and counting. Data sourced from public ecosystem databases and organization websites.
+          {initiatives.length} initiatives and counting. Data sourced from public ecosystem databases and organization websites.
         </p>
       </footer>
     </div>
+    </InitiativesContext.Provider>
   );
 }
