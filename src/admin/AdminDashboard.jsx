@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, X, Check } from "lucide-react";
+import { Search, X, Check, Trash2 } from "lucide-react";
 
 const TYPES = ["Accelerator", "Incubator", "Campus / Coworking", "Community / Network", "Support Program", "Event"];
 const ACCESS_OPTIONS = ["Open to all", "Application required"];
@@ -9,9 +9,11 @@ export default function AdminDashboard({ token }) {
   const [initiatives, setInitiatives] = useState([]);
   const [changes, setChanges] = useState({});
   const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
   useEffect(() => {
     fetch("/api/initiatives", { headers: { "x-admin-token": token } })
@@ -52,11 +54,23 @@ export default function AdminDashboard({ token }) {
     }
   }
 
-  const filtered = initiatives.filter(i =>
-    !search ||
-    i.name.toLowerCase().includes(search.toLowerCase()) ||
-    (i.organization || "").toLowerCase().includes(search.toLowerCase())
-  );
+  async function deleteInitiative(id) {
+    await fetch("/api/initiatives", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json", "x-admin-token": token },
+      body: JSON.stringify({ id }),
+    });
+    setInitiatives(prev => prev.filter(i => i.id !== id));
+    setChanges(prev => { const c = { ...prev }; delete c[id]; return c; });
+    setConfirmDelete(null);
+  }
+
+  const filtered = initiatives.filter(i => {
+    if (typeFilter && i.type !== typeFilter) return false;
+    if (search && !i.name.toLowerCase().includes(search.toLowerCase()) &&
+      !(i.organization || "").toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
 
   const th = { padding: "10px 6px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#64748b", whiteSpace: "nowrap", borderBottom: "2px solid #e2e8f0" };
   const cell = { padding: "8px 6px", verticalAlign: "top" };
@@ -65,7 +79,23 @@ export default function AdminDashboard({ token }) {
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+      {/* Confirm delete modal */}
+      {confirmDelete && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ background: "white", borderRadius: 16, padding: 28, maxWidth: 380, width: "100%", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", margin: "0 0 8px" }}>Delete initiative?</h3>
+            <p style={{ fontSize: 14, color: "#64748b", margin: "0 0 20px" }}>
+              <strong>{confirmDelete.name}</strong> will be permanently removed from the database.
+            </p>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={() => setConfirmDelete(null)} style={{ flex: 1, padding: "9px", background: "#f1f5f9", color: "#475569", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Cancel</button>
+              <button onClick={() => deleteInitiative(confirmDelete.id)} style={{ flex: 1, padding: "9px", background: "#ef4444", color: "white", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, gap: 12, flexWrap: "wrap" }}>
         <div>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#0f172a", margin: "0 0 2px" }}>Initiatives</h2>
           <p style={{ fontSize: 13, color: "#64748b", margin: 0 }}>
@@ -73,15 +103,24 @@ export default function AdminDashboard({ token }) {
             {changedCount > 0 && <span style={{ color: "#f59e0b", fontWeight: 600 }}> · {changedCount} unsaved change{changedCount !== 1 ? "s" : ""}</span>}
           </p>
         </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          {/* Search */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", background: "white", border: "1.5px solid #e2e8f0", borderRadius: 10 }}>
             <Search size={15} style={{ color: "#94a3b8" }} />
-            <input
-              placeholder="Search…" value={search} onChange={e => setSearch(e.target.value)}
-              style={{ border: "none", outline: "none", fontSize: 14, width: 200 }}
-            />
+            <input placeholder="Search…" value={search} onChange={e => setSearch(e.target.value)}
+              style={{ border: "none", outline: "none", fontSize: 14, width: 160 }} />
             {search && <button onClick={() => setSearch("")} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={14} /></button>}
           </div>
+          {/* Type filter */}
+          <select
+            value={typeFilter}
+            onChange={e => setTypeFilter(e.target.value)}
+            style={{ padding: "9px 12px", border: typeFilter ? "1.5px solid #4f6df5" : "1.5px solid #e2e8f0", borderRadius: 10, fontSize: 13, fontWeight: typeFilter ? 600 : 400, color: typeFilter ? "#4f6df5" : "#64748b", background: typeFilter ? "#f0f4ff" : "white", outline: "none", cursor: "pointer" }}
+          >
+            <option value="">All types</option>
+            {TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+          {/* Save button */}
           <button
             onClick={saveAll}
             disabled={saving || changedCount === 0}
@@ -113,7 +152,8 @@ export default function AdminDashboard({ token }) {
                 <th style={th}>URL</th>
                 <th style={th}>Access</th>
                 <th style={th}>Cost</th>
-                <th style={{ ...th, paddingRight: 12 }}>Notes</th>
+                <th style={th}>Notes</th>
+                <th style={{ ...th, paddingRight: 12 }}></th>
               </tr>
             </thead>
             <tbody>
@@ -139,7 +179,18 @@ export default function AdminDashboard({ token }) {
                       {COST_OPTIONS.map(o => <option key={o}>{o}</option>)}
                     </select>
                   </td>
-                  <td style={{ ...cell, paddingRight: 12 }}><textarea style={{ ...inp, minWidth: 180, minHeight: 56, resize: "vertical" }} value={get(i, "notes") || ""} onChange={e => update(i.id, "notes", e.target.value)} /></td>
+                  <td style={cell}><textarea style={{ ...inp, minWidth: 180, minHeight: 56, resize: "vertical" }} value={get(i, "notes") || ""} onChange={e => update(i.id, "notes", e.target.value)} /></td>
+                  <td style={{ ...cell, paddingRight: 12 }}>
+                    <button
+                      onClick={() => setConfirmDelete(i)}
+                      title="Delete"
+                      style={{ padding: "6px 8px", background: "none", border: "1px solid #fecaca", borderRadius: 7, cursor: "pointer", color: "#ef4444", display: "flex", alignItems: "center" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#fef2f2"}
+                      onMouseLeave={e => e.currentTarget.style.background = "none"}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
