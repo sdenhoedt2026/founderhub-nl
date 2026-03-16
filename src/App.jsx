@@ -375,7 +375,7 @@ function InitiativeCard({ initiative }) {
             fontSize: 11, color: accessColor, background: accessBg, padding: "3px 8px",
             borderRadius: 6, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
           }}>
-            {initiative.access === "Open to all" ? "Open to all" : "Apply"}
+            {initiative.access === "Open to all" ? "✓ Open to all" : "Application required"}
           </span>
         </div>
         <h3 style={{ fontSize: 17, fontWeight: 700, color: "#0f172a", margin: "0 0 4px", lineHeight: 1.3 }}>
