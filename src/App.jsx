@@ -175,9 +175,48 @@ const PROVINCES = [...new Set(FALLBACK_INITIATIVES.map(i => i.province).filter(B
   if (b === "Nationwide") return -1;
   return a.localeCompare(b);
 });
-const CITIES = [...new Set(FALLBACK_INITIATIVES.map(i => i.city).filter(Boolean))].sort((a, b) => {
-  if (a === "Nationwide") return 1;
-  if (b === "Nationwide") return -1;
+// ─── CITY DATA ───────────────────────────────────────────────────────────────
+const CITY_MAP = {
+  1:"Rotterdam", 2:"The Netherlands", 3:"Rotterdam", 4:"The Netherlands", 5:"Amsterdam",
+  6:"Delft", 7:"Rotterdam", 8:"Rotterdam", 9:"Naaldwijk", 10:"Leiden",
+  11:"Delft", 12:"Leiden", 13:"Rotterdam", 14:"Noordwijk", 15:"Delft",
+  16:"Katwijk", 17:"Delft", 18:"Rotterdam", 19:"Delft", 20:"Rotterdam",
+  21:"Leiden", 22:"Delft", 23:"The Hague", 24:"The Netherlands", 25:"Rotterdam",
+  26:"Zoetermeer", 27:"Dordrecht", 28:"Rotterdam", 29:"Delft", 30:"Rotterdam",
+  31:"Rotterdam", 32:"Rotterdam", 33:"Eindhoven", 34:"Delft", 35:"Schiedam",
+  36:"Rotterdam", 37:"Rotterdam", 38:"Rotterdam", 39:"Eindhoven", 40:"Rotterdam",
+  41:"Delft", 42:"Rotterdam", 43:"Noordwijk", 44:"The Hague", 45:"Rotterdam",
+  46:"Eindhoven", 47:"Rotterdam", 48:"Rotterdam", 49:"The Netherlands", 50:"The Hague",
+  51:"The Netherlands", 52:"Rotterdam", 53:"The Netherlands", 54:"The Netherlands", 55:"The Netherlands",
+  56:"Rotterdam", 57:"The Netherlands", 58:"Rotterdam", 59:"Rotterdam", 60:"Rotterdam",
+  61:"Amsterdam", 62:"The Netherlands", 63:"Rotterdam", 64:"The Hague", 65:"Zoetermeer",
+  66:"The Hague", 67:"Naaldwijk", 68:"Delft", 69:"Delft", 70:"Delft",
+  71:"Rotterdam", 72:"The Netherlands", 73:"The Netherlands", 74:"The Hague", 75:"Naaldwijk",
+  76:"Noordwijk", 77:"Rotterdam", 78:"Rotterdam", 79:"Delft", 80:"Delft",
+  81:"The Netherlands", 82:"The Netherlands", 83:"The Netherlands", 84:"Noordwijk", 85:"Katwijk",
+  86:"The Netherlands", 87:"Amsterdam", 88:"Delft", 89:"Delft", 90:"Noordwijk",
+  91:"Leiden", 92:"The Netherlands", 93:"Rotterdam", 94:"Rotterdam", 95:"Rotterdam",
+  96:"The Netherlands", 97:"Leiden", 98:"The Netherlands", 99:"Rotterdam", 100:"Rotterdam",
+  101:"Rotterdam", 102:"Rotterdam", 103:"The Netherlands", 104:"Rotterdam", 105:"The Netherlands",
+  106:"Noordwijk", 107:"Rotterdam", 108:"Rotterdam", 109:"Delft", 110:"Rotterdam",
+  111:"The Hague", 112:"Rotterdam", 113:"Rotterdam", 114:"The Netherlands", 115:"The Netherlands",
+  116:"Leiden", 117:"Rotterdam", 118:"The Netherlands", 119:"Rotterdam", 120:"Rotterdam",
+  121:"The Netherlands", 122:"The Netherlands", 123:"Delft", 124:"The Netherlands", 125:"Delft",
+  126:"The Netherlands", 127:"Rotterdam", 128:"The Netherlands", 129:"Rotterdam", 130:"Rotterdam",
+  131:"Rotterdam", 132:"Rotterdam", 133:"Rotterdam", 134:"Rotterdam", 135:"Delft",
+  136:"The Hague", 137:"Rotterdam", 138:"Eindhoven", 139:"Rotterdam", 140:"Rotterdam",
+  141:"Naaldwijk", 142:"The Netherlands", 143:"The Hague", 144:"Rotterdam", 145:"Rotterdam",
+  146:"Rotterdam", 147:"Noordwijk", 148:"Noordwijk", 149:"Rotterdam", 150:"Eindhoven",
+  151:"Leiden", 152:"Delft", 153:"Delft", 154:"Rotterdam", 155:"Delft",
+  156:"Delft", 157:"Rotterdam", 158:"Rotterdam", 159:"Delft", 160:"Rotterdam",
+  161:"Delft",
+};
+
+const getCity = (initiative) => CITY_MAP[initiative.id] || initiative.city || "";
+
+const CITIES = [...new Set(FALLBACK_INITIATIVES.map(i => CITY_MAP[i.id] || i.city).filter(Boolean))].sort((a, b) => {
+  if (a === "The Netherlands") return 1;
+  if (b === "The Netherlands") return -1;
   return a.localeCompare(b);
 });
 const ALL_INDUSTRIES = [...new Set(FALLBACK_INITIATIVES.flatMap(i => i.industries).filter(Boolean))].sort();
@@ -382,8 +421,13 @@ function InitiativeCard({ initiative }) {
           {initiative.name}
         </h3>
         {initiative.organization && (
-          <p style={{ fontSize: 12.5, color: "#94a3b8", margin: "0 0 8px", fontWeight: 500 }}>
+          <p style={{ fontSize: 12.5, color: "#94a3b8", margin: "0 0 4px", fontWeight: 500 }}>
             {initiative.organization}
+          </p>
+        )}
+        {getCity(initiative) && (
+          <p style={{ fontSize: 12, color: "#94a3b8", margin: "0 0 8px", display: "flex", alignItems: "center", gap: 3 }}>
+            <MapPin size={11} style={{ flexShrink: 0 }} /> {getCity(initiative)}
           </p>
         )}
         {industryTags.length > 0 && (
@@ -603,17 +647,7 @@ function DirectoryPage({ initialFilters }) {
   const [access, setAccess] = useState(initialFilters?.access || "");
   const [cost, setCost] = useState(initialFilters?.cost || "");
 
-  const filteredCities = useMemo(() => {
-    if (!province) return CITIES;
-    return [...new Set(initiatives.filter(i => i.province === province).map(i => i.city))].sort();
-  }, [province, initiatives]);
-
-  useEffect(() => {
-    if (province && city) {
-      const validCities = initiatives.filter(i => i.province === province).map(i => i.city);
-      if (!validCities.includes(city)) setCity("");
-    }
-  }, [province, initiatives]);
+  const filteredCities = useMemo(() => CITIES, []);
 
   const filtered = useMemo(() => {
     return initiatives.filter(i => {
@@ -628,7 +662,7 @@ function DirectoryPage({ initialFilters }) {
         ) return false;
       }
       if (province && i.province !== province) return false;
-      if (city && i.city !== city) return false;
+      if (city && getCity(i) !== city) return false;
       if (industry && !i.industries.includes(industry)) return false;
       if (type && i.type !== type) return false;
       if (format && i.format !== format) return false;
@@ -670,7 +704,7 @@ function DirectoryPage({ initialFilters }) {
         <FilterDropdown icon={Lock} options={ACCESS_OPTIONS} value={access} onChange={setAccess} placeholder="Access" />
         <FilterDropdown icon={DollarSign} options={COST_OPTIONS} value={cost} onChange={setCost} placeholder="Cost" />
         {PROVINCES.length > 0 && <FilterDropdown icon={MapPin} options={PROVINCES} value={province} onChange={setProvince} placeholder="Province" />}
-        {CITIES.length > 0 && <FilterDropdown icon={Building2} options={filteredCities} value={city} onChange={setCity} placeholder="City" />}
+        <FilterDropdown icon={MapPin} options={filteredCities} value={city} onChange={setCity} placeholder="Location" />
         {ALL_INDUSTRIES.length > 0 && <FilterDropdown icon={Tag} options={ALL_INDUSTRIES} value={industry} onChange={setIndustry} placeholder="Industry" />}
         {FORMATS.length > 0 && <FilterDropdown icon={Globe} options={FORMATS} value={format} onChange={setFormat} placeholder="Format" />}
       </div>
