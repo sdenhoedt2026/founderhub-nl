@@ -407,9 +407,11 @@ function InitiativeCard({ initiative }) {
           display: "flex", alignItems: "center", justifyContent: "space-between",
           paddingTop: 12, borderTop: "1px solid #f1f5f9",
         }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: initiative.cost === "Free" ? "#10b981" : "#64748b" }}>
-            {initiative.cost}
-          </span>
+          {["Event", "Community / Network"].includes(initiative.type) && (
+            <span style={{ fontSize: 13, fontWeight: 600, color: initiative.cost === "Free" ? "#10b981" : "#64748b" }}>
+              {initiative.cost}
+            </span>
+          )}
           {initiative.url && <ExternalLink size={14} style={{ color: "#94a3b8" }} />}
         </div>
         <button
