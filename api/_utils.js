@@ -3,8 +3,8 @@ import crypto from 'crypto';
 
 export function getServiceClient() {
   return createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_URL || 'https://nvrgxaqnubalwsbstemu.supabase.co',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52cmd4YXFudWJhbHdzYnN0ZW11Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzY0ODcxOSwiZXhwIjoyMDg5MjI0NzE5fQ.jHDSPiiGzToenvSaEpzu74GUc_HD4FIAAsRahcaRZiQ'
   );
 }
 
