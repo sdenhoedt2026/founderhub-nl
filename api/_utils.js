@@ -60,11 +60,11 @@ export async function sendEmail({ to, subject, html }) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      Authorization: `Bearer ${process.env.RESEND_API_KEY || 're_FmX3Aq63_7tXmR28WSAgiuiTBQShmufkE'}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: `FounderHub NL <noreply@${process.env.EMAIL_DOMAIN || 'founderhub.nl'}>`,
+      from: 'FounderHub NL <onboarding@resend.dev>',
       to: Array.isArray(to) ? to : [to],
       subject,
       html,
