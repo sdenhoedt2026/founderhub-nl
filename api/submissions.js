@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'POST') {
-    const { initiative_name, type, url, organization, city, province, submitter_name, submitter_email, notes } = req.body;
+    const { initiative_name, type, secondary_type, url, organization, city, province, submitter_name, submitter_email, notes } = req.body;
 
     if (!initiative_name || !submitter_name || !submitter_email) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -19,6 +19,7 @@ export default async function handler(req, res) {
         <h2>New initiative submission on FounderHub NL</h2>
         <p><strong>Initiative name:</strong> ${initiative_name}</p>
         <p><strong>Type:</strong> ${type || '—'}</p>
+        <p><strong>Secondary type:</strong> ${secondary_type || '—'}</p>
         <p><strong>Website:</strong> ${url ? `<a href="${url}">${url}</a>` : '—'}</p>
         <p><strong>Organisation:</strong> ${organization || '—'}</p>
         <p><strong>City:</strong> ${city || '—'}</p>

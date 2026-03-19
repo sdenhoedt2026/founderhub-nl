@@ -764,7 +764,7 @@ function AboutPage({ onNavigate }) {
 }
 
 const SUBMIT_TYPES = ["Accelerator", "Incubator", "Campus / Coworking", "Community / Network", "Support Program", "Event"];
-const EMPTY_SUBMISSION = { initiative_name: "", type: SUBMIT_TYPES[0], url: "", organization: "", city: "", province: "", submitter_name: "", submitter_email: "", notes: "" };
+const EMPTY_SUBMISSION = { initiative_name: "", type: SUBMIT_TYPES[0], secondary_type: "", url: "", organization: "", city: "", province: "", submitter_name: "", submitter_email: "", notes: "" };
 
 function SubmitPage() {
   const [form, setForm] = useState(EMPTY_SUBMISSION);
@@ -821,12 +821,21 @@ function SubmitPage() {
           <span style={lblText}>Initiative name *</span>
           <input style={inp} value={form.initiative_name} onChange={e => set("initiative_name", e.target.value)} placeholder="e.g. Startupbootcamp Amsterdam" />
         </label>
-        <label style={lbl}>
-          <span style={lblText}>Type</span>
-          <select style={{ ...inp, background: "white" }} value={form.type} onChange={e => set("type", e.target.value)}>
-            {SUBMIT_TYPES.map(t => <option key={t}>{t}</option>)}
-          </select>
-        </label>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <label style={lbl}>
+            <span style={lblText}>Type</span>
+            <select style={{ ...inp, background: "white" }} value={form.type} onChange={e => set("type", e.target.value)}>
+              {SUBMIT_TYPES.map(t => <option key={t}>{t}</option>)}
+            </select>
+          </label>
+          <label style={lbl}>
+            <span style={lblText}>Secondary type</span>
+            <select style={{ ...inp, background: "white" }} value={form.secondary_type} onChange={e => set("secondary_type", e.target.value)}>
+              <option value="">— None —</option>
+              {SUBMIT_TYPES.map(t => <option key={t}>{t}</option>)}
+            </select>
+          </label>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <label style={lbl}>
             <span style={lblText}>Website URL</span>

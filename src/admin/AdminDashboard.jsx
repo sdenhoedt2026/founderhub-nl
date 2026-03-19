@@ -148,9 +148,10 @@ export default function AdminDashboard({ token }) {
               ))}
               {[
                 { label: "Type", key: "type", options: TYPES },
+                { label: "Secondary type", key: "secondary_type", options: ["", ...TYPES], placeholder: "None" },
                 { label: "Access", key: "access", options: ACCESS_OPTIONS },
                 { label: "Cost", key: "cost", options: COST_OPTIONS },
-              ].map(({ label, key, options }) => (
+              ].map(({ label, key, options, placeholder }) => (
                 <label key={key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                   <span style={{ fontSize: 12, fontWeight: 600, color: "#64748b" }}>{label}</span>
                   <select
@@ -158,7 +159,7 @@ export default function AdminDashboard({ token }) {
                     value={newInitiative[key]}
                     onChange={e => setNewInitiative(p => ({ ...p, [key]: e.target.value }))}
                   >
-                    {options.map(o => <option key={o}>{o}</option>)}
+                    {options.map(o => <option key={o} value={o}>{o || "— None —"}</option>)}
                   </select>
                 </label>
               ))}
