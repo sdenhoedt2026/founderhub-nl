@@ -83,7 +83,7 @@ export default function AdminDashboard({ token }) {
       });
       const data = await res.json();
       if (!res.ok) { setAddError(data.error || "Failed to create initiative."); return; }
-      setInitiatives(prev => [...prev, data]);
+      setInitiatives(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)));
       setShowAddModal(false);
       setNewInitiative(EMPTY_INITIATIVE);
     } finally {
