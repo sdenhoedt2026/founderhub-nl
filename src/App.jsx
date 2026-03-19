@@ -883,7 +883,7 @@ export default function App() {
     supabase
       .from("initiatives")
       .select("*")
-      .order("id")
+      .order("name")
       .then(({ data, error }) => {
         if (!error && data && data.length > 0) setInitiatives(data);
       });
