@@ -763,29 +763,110 @@ function AboutPage({ onNavigate }) {
   );
 }
 
+const SUBMIT_TYPES = ["Accelerator", "Incubator", "Campus / Coworking", "Community / Network", "Support Program", "Event"];
+const EMPTY_SUBMISSION = { initiative_name: "", type: SUBMIT_TYPES[0], url: "", organization: "", city: "", province: "", submitter_name: "", submitter_email: "", notes: "" };
+
 function SubmitPage() {
+  const [form, setForm] = useState(EMPTY_SUBMISSION);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+
+  const set = (key, val) => setForm(p => ({ ...p, [key]: val }));
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!form.initiative_name.trim() || !form.submitter_name.trim() || !form.submitter_email.trim()) {
+      setError("Please fill in the initiative name, your name, and your email.");
+      return;
+    }
+    setStatus("loading");
+    setError("");
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Something went wrong"); }
+      setStatus("success");
+    } catch (err) {
+      setError(err.message);
+      setStatus("idle");
+    }
+  }
+
+  const inp = { width: "100%", padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: 9, fontSize: 14, outline: "none", fontFamily: "inherit", boxSizing: "border-box" };
+  const lbl = { display: "flex", flexDirection: "column", gap: 5 };
+  const lblText = { fontSize: 13, fontWeight: 600, color: "#475569" };
+
+  if (status === "success") {
+    return (
+      <div style={{ maxWidth: 520, margin: "0 auto", padding: "80px 24px", textAlign: "center" }}>
+        <div style={{ fontSize: 40, marginBottom: 16 }}>🎉</div>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>Thanks for the submission!</h1>
+        <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.7 }}>We'll review it and add it to the directory if it's a good fit. We aim to respond within a week.</p>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px 80px" }}>
+    <div style={{ maxWidth: 600, margin: "0 auto", padding: "48px 24px 80px" }}>
       <h1 style={{ fontSize: 28, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>Submit an initiative</h1>
       <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.7, marginBottom: 32 }}>
-        Know of a founder initiative that should be in our directory? Fill out the form below and we'll review your submission within a week. Approved initiatives are added to the site on a rolling basis.
+        Know of a founder initiative that should be in our directory? Fill out the form below and we'll review your submission within a week.
       </p>
-      <div style={{
-        background: "white", borderRadius: 16, border: "1px solid #e8ecf2",
-        overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-      }}>
-        <iframe
-          src="https://docs.google.com/forms/d/e/1FAIpQLSeCNUaWeaEqnVlxe5r4EH8fn_i4kNenTvKDpOX2CUGY-Oux7w/viewform?embedded=true"
-          width="100%"
-          height="1200"
-          frameBorder="0"
-          marginHeight="0"
-          marginWidth="0"
-          style={{ display: "block" }}
-        >
-          Loading form...
-        </iframe>
-      </div>
+      <form onSubmit={handleSubmit} style={{ background: "white", borderRadius: 16, border: "1px solid #e8ecf2", padding: 28, boxShadow: "0 1px 3px rgba(0,0,0,0.04)", display: "flex", flexDirection: "column", gap: 16 }}>
+        <p style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", margin: 0, textTransform: "uppercase", letterSpacing: "0.05em" }}>About the initiative</p>
+        <label style={lbl}>
+          <span style={lblText}>Initiative name *</span>
+          <input style={inp} value={form.initiative_name} onChange={e => set("initiative_name", e.target.value)} placeholder="e.g. Startupbootcamp Amsterdam" />
+        </label>
+        <label style={lbl}>
+          <span style={lblText}>Type</span>
+          <select style={{ ...inp, background: "white" }} value={form.type} onChange={e => set("type", e.target.value)}>
+            {SUBMIT_TYPES.map(t => <option key={t}>{t}</option>)}
+          </select>
+        </label>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <label style={lbl}>
+            <span style={lblText}>Website URL</span>
+            <input style={inp} value={form.url} onChange={e => set("url", e.target.value)} placeholder="https://…" />
+          </label>
+          <label style={lbl}>
+            <span style={lblText}>Organisation</span>
+            <input style={inp} value={form.organization} onChange={e => set("organization", e.target.value)} placeholder="Who runs it?" />
+          </label>
+          <label style={lbl}>
+            <span style={lblText}>City</span>
+            <input style={inp} value={form.city} onChange={e => set("city", e.target.value)} placeholder="e.g. Amsterdam" />
+          </label>
+          <label style={lbl}>
+            <span style={lblText}>Province</span>
+            <input style={inp} value={form.province} onChange={e => set("province", e.target.value)} placeholder="e.g. Noord-Holland" />
+          </label>
+        </div>
+        <label style={lbl}>
+          <span style={lblText}>Notes</span>
+          <textarea style={{ ...inp, minHeight: 80, resize: "vertical" }} value={form.notes} onChange={e => set("notes", e.target.value)} placeholder="Anything else we should know?" />
+        </label>
+
+        <p style={{ fontSize: 12, fontWeight: 600, color: "#94a3b8", margin: "4px 0 0", textTransform: "uppercase", letterSpacing: "0.05em" }}>About you</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <label style={lbl}>
+            <span style={lblText}>Your name *</span>
+            <input style={inp} value={form.submitter_name} onChange={e => set("submitter_name", e.target.value)} placeholder="Jan de Vries" />
+          </label>
+          <label style={lbl}>
+            <span style={lblText}>Your email *</span>
+            <input style={inp} type="email" value={form.submitter_email} onChange={e => set("submitter_email", e.target.value)} placeholder="jan@example.com" />
+          </label>
+        </div>
+
+        {error && <p style={{ fontSize: 13, color: "#ef4444", margin: 0 }}>{error}</p>}
+        <button type="submit" disabled={status === "loading"} style={{ padding: "12px", background: "#4f6df5", color: "white", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>
+          {status === "loading" ? "Sending…" : "Submit initiative"}
+        </button>
+      </form>
     </div>
   );
 }
