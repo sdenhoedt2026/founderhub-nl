@@ -32,7 +32,6 @@ const FALLBACK_INITIATIVES = [
   { id: 99, name: "CIRCO - Circular Design Tracks", type: "Support Program", secondaryType: "", url: "https://www.bluecity.nl/zakelijke-programma-s/circo-tracks", organization: "BlueCity", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 100, name: "Circulair Loket", type: "Support Program", secondaryType: "", url: "https://www.bluecity.nl/zakelijke-programma-s/circulair-loket", organization: "BlueCity", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 101, name: "Circulaire Ketenprojecten", type: "Support Program", secondaryType: "", url: "https://www.bluecity.nl/zakelijke-programma-s/circulaire-ketenprojecten", organization: "BlueCity", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
-  { id: 132, name: "Circular Challenge", type: "Event", secondaryType: "", url: "https://www.bluecity.nl/zakelijke-programma-s/circular-challenge", organization: "BlueCity", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 1, name: "Circular Factory", type: "Accelerator", secondaryType: "", url: "https://www.circular-factory.com", organization: "Circular Factory", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 102, name: "Circular Ideation Lab", type: "Support Program", secondaryType: "", url: "https://www.bluecity.nl/zakelijke-programma-s/circular-ideation-lab", organization: "BlueCity", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 103, name: "Climate Tech Scale-up Support", type: "Support Program", secondaryType: "", url: "", organization: "Provincie Zuid Holland", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
@@ -104,7 +103,6 @@ const FALLBACK_INITIATIVES = [
   { id: 54, name: "North Sea Farmers", type: "Community / Network", secondaryType: "", url: "https://www.northseafarmers.org/", organization: "North Sea Farmers", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 35, name: "ONS Schiedam", type: "Campus / Coworking", secondaryType: "", url: "https://www.onsschiedam.nl", organization: "ONS Schiedam", access: "Open to all", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 150, name: "Philips Innovation Award", type: "Event", secondaryType: "", url: "https://www.phia.nl/", organization: "Philips Innovation Award", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
-  { id: 161, name: "Photovoltaic Systems Summer School", type: "Event", secondaryType: "", url: "https://www.tudelft.nl/en/ewi/", organization: "TU Delft", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 36, name: "Planet b.io", type: "Campus / Coworking", secondaryType: "", url: "https://www.planet-b.io", organization: "Planet b.io", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 93, name: "Planet B.io Community Program", type: "Community / Network", secondaryType: "", url: "https://www.planet-b.io/community/", organization: "Planet b.io", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 37, name: "Plant One", type: "Campus / Coworking", secondaryType: "", url: "https://www.plantone.nl", organization: "Plant One", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
@@ -141,7 +139,6 @@ const FALLBACK_INITIATIVES = [
   { id: 171, name: "Startup Amsterdam", type: "Support Program", secondaryType: "", url: "https://www.iamsterdam.com/bedrijven-in-amsterdam/startup-amsterdam", organization: "I amsterdam", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 60, name: "Startup Grind Rotterdam", type: "Community / Network", secondaryType: "Event", url: "https://www.startupgrind.com/rotterdam/", organization: "Startup Grind", access: "Open to all", cost: "Free", notes: "Also organises regular events and meetups", province: "", city: "", industries: [], format: "" },
   { id: 86, name: "Startup in Residence", type: "Accelerator", secondaryType: "", url: "https://intergov.startupinresidence.com/", organization: "Provincie Zuid Holland", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
-  { id: 155, name: "Startup Investor Dinner", type: "Event", secondaryType: "", url: "https://yesdelft.com/events/startup-investor-dinner-2025/", organization: "Yes!Delft", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 118, name: "Startup Missies", type: "Support Program", secondaryType: "", url: "https://english.rvo.nl/topics/starten-op-buitenlandse-markten/start-ups", organization: "RVO", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 119, name: "Startup Visa Softlanding", type: "Support Program", secondaryType: "", url: "https://www.startupvisa.nl/", organization: "CIC Rotterdam / 42Workspace / ECE", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 120, name: "Student Founder Programme", type: "Support Program", secondaryType: "", url: "https://ecestudents.nl/student-founders-programme/", organization: "ECE", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
@@ -456,7 +453,7 @@ function InitiativeCard({ initiative }) {
           display: "flex", alignItems: "center", justifyContent: "space-between",
           paddingTop: 12, borderTop: "1px solid #f1f5f9",
         }}>
-          {["Event", "Community / Network"].includes(initiative.type) && (
+          {initiative.type === "Community / Network" && (
             <span style={{ fontSize: 13, fontWeight: 600, color: initiative.cost === "Free" ? "#10b981" : "#64748b" }}>
               {initiative.cost}
             </span>
