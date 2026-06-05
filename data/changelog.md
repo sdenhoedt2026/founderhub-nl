@@ -47,3 +47,17 @@ Track of all requested additions, removals, and edits to initiatives.
 | Erasmus University Challenge | Type changed from Event to Incubator |
 
 ---
+
+## 2026-06-05 (3)
+
+### Removed
+| Name | Reason |
+|------|--------|
+| Business Innovation Program Food | Requested by Lisette |
+
+### Changed
+| Name | Change |
+|------|--------|
+| Startup Missies | Removed Up!Rotterdam as organization (now RVO only) |
+
+---
