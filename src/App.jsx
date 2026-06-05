@@ -70,6 +70,7 @@ const FALLBACK_INITIATIVES = [
   { id: 75, name: "Hortiscience Validation & Acceleration", type: "Accelerator", secondaryType: "", url: "https://hiceu.com/en/", organization: "Yes!Delft", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 67, name: "HortiTech", type: "Support Program", secondaryType: "", url: "https://horti-tech.com/", organization: "HortiTech", access: "Application required", cost: "Paid", notes: "R&D and education consultancy for greenhouse horticulture", province: "", city: "", industries: [], format: "" },
   { id: 29, name: "House of Quantum", type: "Campus / Coworking", secondaryType: "", url: "https://www.houseofquantum.com/", organization: "House of Quantum", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
+  { id: 177, name: "HumanX Europe", type: "Event", secondaryType: "", url: "https://www.humanx.co/europe", organization: "HumanX", access: "Open to all", cost: "Paid", notes: "AI summit in Amsterdam.", province: "", city: "", industries: ["AI"], format: "" },
   { id: 142, name: "Hydrogen Innovation Community Events", type: "Event", secondaryType: "", url: "", organization: "Provincie Zuid Holland", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 76, name: "Ignition Programme", type: "Accelerator", secondaryType: "", url: "https://www.sbicnoordwijk.nl/ignition-programme/", organization: "SBIC Noordwijk", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 143, name: "Impact Fest", type: "Event", secondaryType: "", url: "https://www.impactfest.nl/", organization: "ImpactCity the Hague", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
@@ -173,7 +174,6 @@ const FALLBACK_INITIATIVES = [
   { id: 170, name: "UtrechtInc", type: "Incubator", secondaryType: "", url: "https://utrechtinc.nl/", organization: "UtrechtInc", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 88, name: "Validation Program", type: "Accelerator", secondaryType: "", url: "https://yesdelft.com/services/validation-lab/", organization: "Yes!Delft", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 63, name: "Voorgoed Agency", type: "Community / Network", secondaryType: "", url: "https://www.voorgoedagency.nl/", organization: "Voorgoed Agency", access: "Open to all", cost: "Free", notes: "Focus on social entrepreneurship in Rotterdam", province: "", city: "", industries: [], format: "" },
-  { id: 95, name: "WEC 500 Startup Community", type: "Community / Network", secondaryType: "", url: "https://platformzero.co/pz-events/", organization: "Platform Zero", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 47, name: "Workspot", type: "Campus / Coworking", secondaryType: "", url: "https://workspot.nu/", organization: "Workspot", access: "Open to all", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 6, name: "Yes!Delft", type: "Accelerator", secondaryType: "Incubator", url: "https://www.yesdelft.com", organization: "Yes!Delft", access: "Application required", cost: "Paid", notes: "Offers both incubation and acceleration programs", province: "", city: "", industries: [], format: "" },
 ];
@@ -220,7 +220,7 @@ const CITY_MAP = {
   161:"Delft", 162:"Amsterdam", 163:"Rotterdam", 164:"Amsterdam", 165:"Amsterdam",
   166:"Enschede", 167:"The Netherlands", 168:"Amsterdam", 169:"Amsterdam",
   170:"Utrecht", 171:"Amsterdam", 172:"Breda", 173:"Amsterdam", 174:"Amsterdam", 175:"Utrecht",
-  176:"Groningen",
+  176:"Groningen", 177:"Amsterdam",
 };
 
 const getCity = (initiative) => CITY_MAP[initiative.id] || initiative.city || "";
