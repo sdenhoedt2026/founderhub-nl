@@ -496,12 +496,19 @@ function InitiativeCard({ initiative }) {
   );
 }
 
-function StatCard({ label, value, icon: Icon }) {
+function StatCard({ label, value, icon: Icon, onClick }) {
   return (
-    <div style={{
-      background: "white", borderRadius: 14, padding: "20px 24px", border: "1px solid #e8ecf2",
-      display: "flex", alignItems: "center", gap: 16,
-    }}>
+    <div
+      onClick={onClick}
+      style={{
+        background: "white", borderRadius: 14, padding: "20px 24px", border: "1px solid #e8ecf2",
+        display: "flex", alignItems: "center", gap: 16,
+        cursor: onClick ? "pointer" : "default",
+        transition: "all 0.15s ease",
+      }}
+      onMouseEnter={e => { if (onClick) { e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.08)"; e.currentTarget.style.borderColor = "#4f6df5"; } }}
+      onMouseLeave={e => { e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.borderColor = "#e8ecf2"; }}
+    >
       <div style={{
         width: 44, height: 44, borderRadius: 12, background: "#f0f4ff",
         display: "flex", alignItems: "center", justifyContent: "center",
@@ -565,10 +572,10 @@ function HomePage({ onNavigate }) {
 
       <div style={{ maxWidth: 960, margin: "-30px auto 0", padding: "0 24px", position: "relative", zIndex: 10 }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-          <StatCard label="Initiatives" value={initiatives.length} icon={Rocket} />
-          <StatCard label="Locations" value={initiatives.filter(i => i.type === "Campus / Coworking").length} icon={Building2} />
-          <StatCard label="Events" value={initiatives.filter(i => i.type === "Event").length} icon={Mic} />
-          <StatCard label="Communities" value={initiatives.filter(i => i.type === "Community / Network").length} icon={Users} />
+          <StatCard label="Initiatives" value={initiatives.length} icon={Rocket} onClick={() => onNavigate("directory")} />
+          <StatCard label="Locations" value={initiatives.filter(i => i.type === "Campus / Coworking").length} icon={Building2} onClick={() => onNavigate("directory", { type: "Campus / Coworking" })} />
+          <StatCard label="Events" value={initiatives.filter(i => i.type === "Event").length} icon={Mic} onClick={() => onNavigate("directory", { type: "Event" })} />
+          <StatCard label="Communities" value={initiatives.filter(i => i.type === "Community / Network").length} icon={Users} onClick={() => onNavigate("directory", { type: "Community / Network" })} />
         </div>
       </div>
 
