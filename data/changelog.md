@@ -18,5 +18,6 @@ Track of all requested additions, removals, and edits to initiatives.
 | Name | Reason |
 |------|--------|
 | ELITTE | Requested by Lisette |
+| Keilewerf | Requested by Lisette |
 
 ---
