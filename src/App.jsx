@@ -169,6 +169,8 @@ const FALLBACK_INITIATIVES = [
   { id: 161, name: "Photovoltaic Systems Summer School", type: "Event", secondaryType: "", url: "https://www.tudelft.nl/en/ewi/", organization: "TU Delft", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 162, name: "Founders Boxing Club", type: "Community / Network", secondaryType: "", url: "https://www.foundersboxingclub.com/", organization: "Founders Boxing Club", access: "Open to all", cost: "Paid", notes: "Boxing club and community for founders and entrepreneurs.", province: "", city: "", industries: [], format: "" },
   { id: 163, name: "COHORT", type: "Community / Network", secondaryType: "", url: "https://cohort-connective.lovable.app/", organization: "COHORT", access: "Open to all", cost: "Free", notes: "Community connecting founders and builders.", province: "", city: "", industries: [], format: "" },
+  { id: 164, name: "Hello Tomorrow", type: "Event", secondaryType: "", url: "https://hello-tomorrow.org/", organization: "Hello Tomorrow", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
+  { id: 165, name: "Amsterdam Tech Week", type: "Event", secondaryType: "", url: "https://amstechweek.com/", organization: "Amsterdam Tech Week", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
 ];
 
 const PROVINCES = [...new Set(FALLBACK_INITIATIVES.map(i => i.province).filter(Boolean))].sort((a, b) => {
@@ -210,7 +212,7 @@ const CITY_MAP = {
   146:"Rotterdam", 147:"Noordwijk", 148:"Noordwijk", 149:"Rotterdam", 150:"Eindhoven",
   151:"Leiden", 152:"Delft", 153:"Delft", 154:"Rotterdam", 155:"Delft",
   156:"Delft", 157:"Rotterdam", 158:"Rotterdam", 159:"Delft", 160:"Rotterdam",
-  161:"Delft", 162:"The Netherlands", 163:"The Netherlands",
+  161:"Delft", 162:"Amsterdam", 163:"Rotterdam", 164:"Amsterdam", 165:"Amsterdam",
 };
 
 const getCity = (initiative) => CITY_MAP[initiative.id] || initiative.city || "";
