@@ -75,3 +75,17 @@ Track of all requested additions, removals, and edits to initiatives.
 | Crossroads | Event | Utrecht | https://crossroadsevent.nl/ |
 
 ---
+
+## 2026-06-05 (5)
+
+### Added
+| Name | Type | City | URL |
+|------|------|------|-----|
+| Founded in the North | Support Program | Groningen | https://www.founded.in/en |
+
+### Changed
+| Name | Change |
+|------|--------|
+| Apollo14 | City corrected from Rotterdam to The Hague |
+
+---
