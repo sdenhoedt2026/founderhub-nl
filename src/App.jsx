@@ -50,6 +50,7 @@ const FALLBACK_INITIATIVES = [
   { id: 107, name: "European Scaleup Institute", type: "Support Program", secondaryType: "", url: "https://scaleupinstitute.eu/", organization: "ECE", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 135, name: "Events Buccaneer", type: "Event", secondaryType: "", url: "https://buccaneerdelft.com/events/", organization: "Buccaneer Delft", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 8, name: "Forward Incubator", type: "Incubator", secondaryType: "", url: "https://www.newcomersforward.com/", organization: "Forward·Inc", access: "Application required", cost: "Free", notes: "Focused on entrepreneurs with newcomer/refugee background; based at CIC Rotterdam", province: "", city: "", industries: [], format: "" },
+  { id: 176, name: "Founded in the North", type: "Support Program", secondaryType: "", url: "https://www.founded.in/en", organization: "Founded in the North", access: "Application required", cost: "Free", notes: "Support program for startups in Groningen and Leeuwarden.", province: "", city: "", industries: [], format: "" },
   { id: 169, name: "Founder Fuel", type: "Community / Network", secondaryType: "", url: "https://www.founderfuel.vc/", organization: "Founder Fuel", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 168, name: "Founder Mesh", type: "Community / Network", secondaryType: "", url: "https://www.foundersmesh.com/", organization: "Founder Mesh", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 162, name: "Founders Boxing Club", type: "Community / Network", secondaryType: "", url: "https://www.foundersboxingclub.com/", organization: "Founders Boxing Club", access: "Open to all", cost: "Paid", notes: "Boxing club and community for founders and entrepreneurs.", province: "", city: "", industries: [], format: "" },
@@ -187,7 +188,7 @@ const CITY_MAP = {
   1:"Rotterdam", 2:"The Netherlands", 3:"Rotterdam", 4:"The Netherlands", 5:"Amsterdam",
   6:"Delft", 7:"Rotterdam", 8:"Rotterdam", 9:"Naaldwijk", 10:"Leiden",
   11:"Delft", 12:"Leiden", 13:"Rotterdam", 14:"Noordwijk", 15:"Delft",
-  16:"Katwijk", 17:"Delft", 18:"Rotterdam", 19:"Delft", 20:"Rotterdam",
+  16:"Katwijk", 17:"Delft", 18:"Rotterdam", 19:"Delft", 20:"The Hague",
   21:"Leiden", 22:"Delft", 23:"The Hague", 24:"The Netherlands", 25:"Rotterdam",
   26:"Zoetermeer", 27:"Dordrecht", 28:"Rotterdam", 29:"Delft", 30:"Rotterdam",
   31:"Rotterdam", 32:"Rotterdam", 33:"Eindhoven", 34:"Delft", 35:"Schiedam",
@@ -219,6 +220,7 @@ const CITY_MAP = {
   161:"Delft", 162:"Amsterdam", 163:"Rotterdam", 164:"Amsterdam", 165:"Amsterdam",
   166:"Enschede", 167:"The Netherlands", 168:"Amsterdam", 169:"Amsterdam",
   170:"Utrecht", 171:"Amsterdam", 172:"Breda", 173:"Amsterdam", 174:"Amsterdam", 175:"Utrecht",
+  176:"Groningen",
 };
 
 const getCity = (initiative) => CITY_MAP[initiative.id] || initiative.city || "";
