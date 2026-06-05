@@ -13,6 +13,7 @@ const FALLBACK_INITIATIVES = [
   { id: 19, name: "Aerospace Innovation Hub", type: "Campus / Coworking", secondaryType: "", url: "https://aerospaceinnovationhub.nl/", organization: "Aerospace Innovation Hub", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 69, name: "AI Validation & Acceleration", type: "Accelerator", secondaryType: "", url: "https://mondai.tudelftcampus.nl/en/", organization: "Yes!Delft", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 165, name: "Amsterdam Tech Week", type: "Event", secondaryType: "", url: "https://amstechweek.com/", organization: "Amsterdam Tech Week", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
+  { id: 178, name: "Antler", type: "Accelerator", secondaryType: "", url: "https://www.antler.co/continental-europe", organization: "Antler", access: "Application required", cost: "Equity-based", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 20, name: "Apollo14", type: "Campus / Coworking", secondaryType: "", url: "https://www.apollo14.nl", organization: "Apollo14", access: "Open to all", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 173, name: "B.Amsterdam", type: "Campus / Coworking", secondaryType: "", url: "https://b-amsterdam.com/", organization: "B.Amsterdam", access: "Open to all", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 129, name: "Bakkie Impact", type: "Event", secondaryType: "", url: "https://www.voorgoedagency.nl/bakkie-impact-opstroopsessie/", organization: "Voorgoed Agency", access: "Open to all", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
@@ -20,6 +21,7 @@ const FALLBACK_INITIATIVES = [
   { id: 11, name: "Biotech Campus Delft", type: "Campus / Coworking", secondaryType: "", url: "https://www.biotechcampusdelft.com", organization: "Biotech Campus Delft", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 97, name: "Biotech Training Facility", type: "Support Program", secondaryType: "", url: "https://biotechtrainingfacility.com/en", organization: "Leiden Bio Science Park", access: "Application required", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 7, name: "BlueCity", type: "Incubator", secondaryType: "Campus / Coworking", url: "https://www.bluecity.nl", organization: "BlueCity", access: "Application required", cost: "Paid", notes: "Physical workspace in former Tropicana swimming pool; also open as event/meeting venue", province: "", city: "", industries: [], format: "" },
+  { id: 179, name: "Brightlands", type: "Campus / Coworking", secondaryType: "Accelerator", url: "https://www.brightlands.com/", organization: "Brightlands", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 22, name: "Buccaneer Delft", type: "Campus / Coworking", secondaryType: "", url: "https://www.buccaneerdelft.com", organization: "Buccaneer Delft", access: "Open to all", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 172, name: "bwise", type: "Community / Network", secondaryType: "Accelerator", url: "https://bwise.tech/", organization: "bwise", access: "Application required", cost: "Free", notes: "", province: "", city: "", industries: [], format: "" },
   { id: 23, name: "Caballerofabriek", type: "Campus / Coworking", secondaryType: "", url: "https://www.caballerofabriek.nl", organization: "Caballerofabriek", access: "Open to all", cost: "Paid", notes: "", province: "", city: "", industries: [], format: "" },
@@ -220,7 +222,7 @@ const CITY_MAP = {
   161:"Delft", 162:"Amsterdam", 163:"Rotterdam", 164:"Amsterdam", 165:"Amsterdam",
   166:"Enschede", 167:"The Netherlands", 168:"Amsterdam", 169:"Amsterdam",
   170:"Utrecht", 171:"Amsterdam", 172:"Breda", 173:"Amsterdam", 174:"Amsterdam", 175:"Utrecht",
-  176:"Groningen", 177:"Amsterdam",
+  176:"Groningen", 177:"Amsterdam", 178:"Amsterdam", 179:"The Netherlands",
 };
 
 const getCity = (initiative) => CITY_MAP[initiative.id] || initiative.city || "";
