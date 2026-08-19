@@ -76,6 +76,29 @@ Track of all requested additions, removals, and edits to initiatives.
 
 ---
 
+## 2026-08-19 (2)
+
+### Added
+| Name | Type | City | URL |
+|------|------|------|-----|
+| The Stack | Campus / Coworking | Amsterdam | https://thestack.ai/ |
+| AI House | Campus / Coworking | Amsterdam | https://www.aihouse.nl/ |
+
+### Removed
+| Name | Reason |
+|------|--------|
+| Incubators United | Requested by Lisette |
+| Greenport West Holland | Requested by Lisette |
+| QuantumDelta Infinity | Requested by Lisette |
+
+### Changed
+| Name | Change |
+|------|--------|
+| LaatBloeien | Renamed to Mr Green Offices; URL updated to mrgreenoffices.nl |
+| Progress Bar | City corrected from Eindhoven to Rotterdam |
+
+---
+
 ## 2026-08-19
 
 ### Added
