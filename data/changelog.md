@@ -76,6 +76,15 @@ Track of all requested additions, removals, and edits to initiatives.
 
 ---
 
+## 2026-08-19
+
+### Added
+| Name | Type | City | URL |
+|------|------|------|-----|
+| SuperConnectors | Event | The Netherlands | https://www.superconnectors.io/#events |
+
+---
+
 ## 2026-06-05 (5)
 
 ### Added
