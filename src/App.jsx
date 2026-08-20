@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect, createContext, useContext } from "react";
 import { Search, MapPin, Building2, ExternalLink, Filter, X, ChevronDown, Users, Mic, Rocket, Globe, ArrowRight, Tag, Briefcase, Lightbulb, Lock, DollarSign } from "lucide-react";
 import { supabase } from "./lib/supabase.js";
-import ClaimModal from "./components/ClaimModal.jsx";
 
 export const InitiativesContext = createContext([]);
 
@@ -373,7 +372,6 @@ function FilterDropdown({ icon: Icon, options, value, onChange, placeholder }) {
 }
 
 function InitiativeCard({ initiative }) {
-  const [claimOpen, setClaimOpen] = useState(false);
   const config = TYPE_CONFIG[initiative.type] || { icon: Globe, color: "#64748b", bg: "#f1f5f9" };
   const TypeIcon = config.icon;
   const accessColor = initiative.access === "Open to all" ? "#10b981" : "#f59e0b";
@@ -459,36 +457,15 @@ function InitiativeCard({ initiative }) {
           )}
           {initiative.url && <ExternalLink size={14} style={{ color: "#94a3b8" }} />}
         </div>
-        <button
-          onClick={e => { e.preventDefault(); e.stopPropagation(); setClaimOpen(true); }}
-          style={{
-            marginTop: 10, width: "100%", padding: "7px 0",
-            background: "none", border: "1px solid #e2e8f0", borderRadius: 8,
-            fontSize: 12, color: "#94a3b8", cursor: "pointer", fontWeight: 500,
-            transition: "all 0.15s",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "#4f6df5"; e.currentTarget.style.color = "#4f6df5"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#94a3b8"; }}
-        >
-          Claim this listing
-        </button>
       </div>
     </div>
   );
 
-  if (!initiative.url) return (
-    <>
-      <div style={{ height: "100%" }}>{inner}</div>
-      {claimOpen && <ClaimModal initiative={initiative} onClose={() => setClaimOpen(false)} />}
-    </>
-  );
+  if (!initiative.url) return <div style={{ height: "100%" }}>{inner}</div>;
   return (
-    <>
-      <a href={initiative.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
-        {inner}
-      </a>
-      {claimOpen && <ClaimModal initiative={initiative} onClose={() => setClaimOpen(false)} />}
-    </>
+    <a href={initiative.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
+      {inner}
+    </a>
   );
 }
 
